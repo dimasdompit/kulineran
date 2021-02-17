@@ -140,9 +140,11 @@ export default {
     }
   },
   methods: {
+    /* ==================== SET KERANJANG DATA ==================== */
     setKeranjang: function (data) {
       this.keranjangs = data
     },
+    /* ==================== GET KERANJANG FROM API ==================== */
     getKeranjang: async function () {
       await axios({
         method: 'GET',
@@ -151,12 +153,14 @@ export default {
         .then((res) => this.setKeranjang(res.data))
         .catch((error) => console.log(error))
     },
+    /* ==================== DELETE KERANJANG FROM API ==================== */
     deleteKeranjangs: async function (id) {
       await axios({
         method: 'DELETE',
         url: `http://localhost:3000/keranjangs/${id}`
       })
         .then(() => {
+          // alert success
           this.$toast.success('Delete Success', {
             type: 'success',
             position: 'top-right',
@@ -168,10 +172,11 @@ export default {
         .catch((error) => console.log(error))
     }
   },
-  created () {
+  mounted () {
     this.getKeranjang()
   },
   computed: {
+    /* ==================== SET TOTAL HARGA ==================== */
     totalHarga: function () {
       return this.keranjangs.reduce((items, data) => {
         return items + data.products.harga * data.jumlah_pemesanan

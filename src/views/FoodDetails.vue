@@ -84,9 +84,24 @@ export default {
     }
   },
   methods: {
+    /* ==================== SET PRODUCT DETAILS DATA ==================== */
     setProductDetails: function (data) {
       this.product = data
     },
+    /* ==================== GET PRODUCT DETAILS FROM API ==================== */
+    getProductDetails: async function () {
+      await axios({
+        method: 'GET',
+        url: `http://localhost:3000/products/${this.$route.params.id}`
+      })
+        .then((res) => {
+          this.setProductDetails(res.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    /* ==================== POST PESANAN TO API ==================== */
     pemesanan: async function () {
       if (this.pesan.jumlah_pemesanan && this.pesan.jumlah_pemesanan >= 1) {
         this.pesan.products = this.product
@@ -96,7 +111,9 @@ export default {
           data: this.pesan
         })
           .then((res) => {
+            // redirect to '/cart'
             this.$router.push({ path: '/cart' })
+            // alert success
             this.$toast.success('Add to Cart Success', {
               type: 'success',
               position: 'top-right',
@@ -108,6 +125,7 @@ export default {
             console.log(error)
           })
       } else {
+        // alert error
         this.$toast.error('Order Quantity Minimum 1', {
           type: 'error',
           position: 'top-right',
@@ -117,17 +135,8 @@ export default {
       }
     }
   },
-  async created () {
-    await axios({
-      method: 'GET',
-      url: `http://localhost:3000/products/${this.$route.params.id}`
-    })
-      .then((res) => {
-        this.setProductDetails(res.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  mounted () {
+    this.getProductDetails()
   }
 }
 </script>

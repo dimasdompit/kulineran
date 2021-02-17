@@ -41,19 +41,24 @@ export default {
     }
   },
   methods: {
-    setProducts (data) {
+    /* ==================== SET PRODUCTS DATA ==================== */
+    setProducts: function (data) {
       this.products = data
+    },
+    /* ==================== GET PRODUCTS FROM API ==================== */
+    getProducts: async function () {
+      await axios({
+        method: 'GET',
+        url: 'http://localhost:3000/best-products'
+      }).then(res => {
+        this.setProducts(res.data)
+      }).catch(error => {
+        console.log('Failed', error)
+      })
     }
   },
-  async created () {
-    await axios({
-      method: 'GET',
-      url: 'http://localhost:3000/best-products'
-    }).then(res => {
-      this.setProducts(res.data)
-    }).catch(error => {
-      console.log('Failed', error)
-    })
+  mounted () {
+    this.getProducts()
   }
 }
 </script>

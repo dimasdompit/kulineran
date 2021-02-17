@@ -48,19 +48,22 @@ export default {
   methods: {
     setJumlah: function (data) {
       this.jumlah_pesanans = data
+    },
+    getJumlah: async function () {
+      await axios({
+        method: 'GET',
+        url: 'http://localhost:3000/keranjangs'
+      })
+        .then((res) => {
+          this.setJumlah(res.data)
+        })
+        .catch((error) => {
+          console.log('Failed', error)
+        })
     }
   },
-  async created () {
-    await axios({
-      method: 'GET',
-      url: 'http://localhost:3000/keranjangs'
-    })
-      .then((res) => {
-        this.setJumlah(res.data)
-      })
-      .catch((error) => {
-        console.log('Failed', error)
-      })
+  async mounted () {
+    this.getJumlah()
   }
 }
 </script>

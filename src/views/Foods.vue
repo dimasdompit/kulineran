@@ -63,11 +63,26 @@ export default {
     }
   },
   methods: {
-    setProducts (data) {
+    /* ==================== SET PRODUCTS DATA ==================== */
+    setProducts: function (data) {
       this.products = data
     },
-    searchProducts () {
-      axios({
+    /* ==================== GET PRODUCTS FROM API ==================== */
+    getProducts: async function () {
+      await axios({
+        method: 'GET',
+        url: 'http://localhost:3000/products'
+      })
+        .then((res) => {
+          this.products = res.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    /* ==================== SEARCH PRODUCTS FROM API ==================== */
+    searchProducts: async function () {
+      await axios({
         method: 'GET',
         url: `http://localhost:3000/products/?q=${this.search}`
       })
@@ -79,17 +94,8 @@ export default {
         })
     }
   },
-  async created () {
-    await axios({
-      method: 'GET',
-      url: 'http://localhost:3000/products'
-    })
-      .then((res) => {
-        this.products = res.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  mounted () {
+    this.getProducts()
   }
 }
 </script>
